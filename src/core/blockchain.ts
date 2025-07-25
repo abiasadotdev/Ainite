@@ -11,7 +11,7 @@ class Blockchain {
   constructor() {
     this.chain = [this.createGenesisBlock()];
     this.memPool = [];
-    this.difficulty = 2;
+    this.difficulty = 4;
     this.miningStatus = false;
   }
 
@@ -56,7 +56,7 @@ class Blockchain {
       new Transaction("Mining reward", "system", miner, 20, "Mining reward"),
     ];
 
-    return "MemPool successfully mined.";
+    return block;
   }
 
   chainValidation() {
@@ -83,6 +83,8 @@ class Blockchain {
 
   endMining() {
     this.miningStatus = false;
+
+    console.log("Mining stoped.");
   }
 }
 
