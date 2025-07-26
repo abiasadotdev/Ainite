@@ -4,7 +4,7 @@ import Transaction from "./transaction";
 
 import Broadcast from "../net/broadcast";
 
-import { myWallet } from "../node/config";
+import { ME, myWallet } from "../node/config";
 
 class Blockchain {
   chain: any;
@@ -55,7 +55,7 @@ class Blockchain {
   }
 
   mineMemPool(miner: any) {
-    if (myWallet.stakedBalance > 500) {
+    if (ME.uptime > 50000) {
       const block = new Block(
         this.getLatestBlock().index + 1,
         Date.now(),
@@ -64,6 +64,8 @@ class Blockchain {
       );
 
       this.chain.push(block);
+
+      console.log("MemPool successfully mined.");
 
       const tx = new Transaction(
         "Mining reward",
@@ -79,7 +81,7 @@ class Blockchain {
 
       return block;
     } else {
-      console.log("Your staked balance is low.");
+      console.log("Your node uptime is low.");
 
       return false;
     }

@@ -12,9 +12,7 @@ const HOST = process.argv[2];
 
 const PORT = Number(process.argv[3]);
 
-const stakedAmount = Number(process.argv[4]);
-
-Setup(HOST, PORT, stakedAmount);
+Setup(HOST, PORT);
 
 Network();
 
@@ -35,7 +33,3 @@ setInterval(() => {
     console.log("Your balance : ", Ainite.getBalance(myWallet.publicKey));
   }
 }, 30000);
-
-setTimeout(() => {
-  myWallet.stake(ME.stakedAmount);
-}, 21000);

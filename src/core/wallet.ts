@@ -14,27 +14,11 @@ class Wallet {
   balance: number;
   privateKey: string;
   publicKey: string;
-  stakedBalance: number;
 
   constructor() {
     this.privateKey = priBase64(privateKey);
     this.publicKey = pubBase64(publicKey);
-    this.balance = Ainite.getBalance(this.publicKey);
-    this.stakedBalance = 0;
-  }
-
-  stake(amount: number) {
-    const balance = Ainite.getBalance(this.publicKey);
-
-    if (balance < amount) {
-      console.log("Your balance is low.");
-
-      return;
-    }
-
-    this.stakedBalance += amount;
-
-    console.log(amount + " $Ainite Successfully staked.");
+    this.balance = 0;
   }
 }
 

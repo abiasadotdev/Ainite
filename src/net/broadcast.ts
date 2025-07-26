@@ -10,7 +10,7 @@ const Broadcast = (event: string, data: any) => {
   const message = new Message(event, data);
 
   NODES.forEach((node) => {
-    if (node.port !== ME.port) {
+    if (node.host !== ME.host) {
       const address = "ws://" + node.host + ":" + node.port;
 
       const broadcast = new WebSocket(address);

@@ -18,7 +18,7 @@ const Network = () => {
           NODES.push(data.data);
 
           NODES.forEach((node) => {
-            if (node.port !== data.data.port) {
+            if (node.host !== data.data.host) {
               Broadcast("receiveNode", NODES);
             }
           });
@@ -29,7 +29,7 @@ const Network = () => {
         case "receiveNode":
           data.data.forEach((nodeData: any) => {
             const nodeValidation = NODES.find(
-              (node: any) => node.port == nodeData.port
+              (node: any) => node.host == nodeData.host
             );
 
             if (!nodeValidation) {
