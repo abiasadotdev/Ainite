@@ -7,8 +7,8 @@ class Transaction {
 
   constructor(
     type: string,
-    from: string,
-    to: string,
+    from: any,
+    to: any,
     amount: number,
     messages: string
   ) {

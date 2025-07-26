@@ -2,24 +2,40 @@ import Block from "./block";
 
 import Transaction from "./transaction";
 
+import Broadcast from "../net/broadcast";
+
+import { myWallet } from "../node/config";
+
 class Blockchain {
-  chain: Block[];
+  chain: any;
   memPool: Transaction[];
   difficulty: number;
-  miningStatus: boolean;
 
   constructor() {
-    this.chain = [this.createGenesisBlock()];
+    this.chain = [];
     this.memPool = [];
     this.difficulty = 4;
-    this.miningStatus = false;
+
+    setTimeout(() => {
+      if (this.chain.length < 1) {
+        this.chain.push(this.createGenesisBlock());
+      }
+    }, 20000);
   }
 
   createGenesisBlock() {
     return new Block(
       0,
       Date.now(),
-      new Transaction("Genesis", "system", "system", 0, "Genesis block"),
+      [
+        new Transaction(
+          "Genesis",
+          "system",
+          myWallet.publicKey,
+          1000,
+          "Mine genesis block"
+        ),
+      ],
       "0"
     );
   }
@@ -38,25 +54,35 @@ class Blockchain {
     return "Transaction created and added to Mem Pool";
   }
 
-  mineMemPool(miner: string) {
-    this.miningStatus = false;
+  mineMemPool(miner: any) {
+    if (myWallet.stakedBalance > 500) {
+      const block = new Block(
+        this.getLatestBlock().index + 1,
+        Date.now(),
+        this.memPool,
+        this.getLatestBlock().hash
+      );
 
-    const block = new Block(
-      this.getLatestBlock().index + 1,
-      Date.now(),
-      this.memPool,
-      this.getLatestBlock().hash
-    );
+      this.chain.push(block);
 
-    block.mine(this.difficulty, () => this.miningStatus);
+      const tx = new Transaction(
+        "Mining reward",
+        "system",
+        miner,
+        1000,
+        "Mining reward"
+      );
 
-    this.chain.push(block);
+      this.memPool = [tx];
 
-    this.memPool = [
-      new Transaction("Mining reward", "system", miner, 20, "Mining reward"),
-    ];
+      Broadcast("receiveTransaction", tx);
 
-    return block;
+      return block;
+    } else {
+      console.log("Your staked balance is low.");
+
+      return false;
+    }
   }
 
   chainValidation() {
@@ -81,10 +107,22 @@ class Blockchain {
     return this.chain[this.chain.length - 1];
   }
 
-  endMining() {
-    this.miningStatus = false;
+  getBalance(address: any) {
+    let balance = 0;
 
-    console.log("Mining stoped.");
+    for (const block of this.chain) {
+      for (const tx of block.data) {
+        if (tx.from === address) {
+          balance -= tx.amount;
+        }
+
+        if (tx.to === address) {
+          balance += tx.amount;
+        }
+      }
+    }
+
+    return balance;
   }
 }
 

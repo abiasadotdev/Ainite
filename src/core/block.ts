@@ -1,9 +1,11 @@
 import * as crypto from "crypto";
 
+import { myWallet } from "../node/config";
+
 class Block {
   index: number;
   timestamp: number;
-  data: object;
+  data: any;
   previousHash: string;
   hash: string;
   nonce: number;
@@ -34,28 +36,6 @@ class Block {
           this.nonce
       )
       .digest("hex");
-  }
-
-  async mine(difficulty: number, miningStatus: () => boolean) {
-    while (
-      this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")
-    ) {
-      if (!miningStatus) {
-        console.log("Mining stopped.");
-
-        return;
-      }
-
-      this.nonce++;
-
-      this.hash = this.createHash();
-
-      console.log(`Block is being mining. Current nonce : ${this.nonce}`);
-
-      await new Promise((resolve) => setImmediate(resolve));
-    }
-
-    console.log("Block successfully mined.", this.hash);
   }
 }
 

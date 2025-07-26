@@ -1,15 +1,15 @@
 import WebSocket from "ws";
 
-import Nodes from "../node/nodeList";
+import { NODES } from "../node/config";
 
 import { ME } from "../node/config";
 
 import Message from "./message";
 
-const Broadcast = (event: string, data: object) => {
+const Broadcast = (event: string, data: any) => {
   const message = new Message(event, data);
 
-  Nodes.forEach((node) => {
+  NODES.forEach((node) => {
     if (node.port !== ME.port) {
       const address = "ws://" + node.host + ":" + node.port;
 

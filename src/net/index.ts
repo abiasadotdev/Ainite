@@ -1,8 +1,6 @@
 import { WebSocketServer } from "ws";
 
-import { ME } from "../node/config";
-
-import Nodes from "../node/nodeList";
+import { ME, NODES } from "../node/config";
 
 import Broadcast from "./broadcast";
 
@@ -17,11 +15,11 @@ const Network = () => {
 
       switch (data.event) {
         case "registerNode":
-          Nodes.push(data.data);
+          NODES.push(data.data);
 
-          Nodes.forEach((node) => {
+          NODES.forEach((node) => {
             if (node.port !== data.data.port) {
-              Broadcast("receiveNode", Nodes);
+              Broadcast("receiveNode", NODES);
             }
           });
 
@@ -30,12 +28,12 @@ const Network = () => {
 
         case "receiveNode":
           data.data.forEach((nodeData: any) => {
-            const nodeValidation = Nodes.find(
+            const nodeValidation = NODES.find(
               (node: any) => node.port == nodeData.port
             );
 
             if (!nodeValidation) {
-              Nodes.push(nodeData);
+              NODES.push(nodeData);
             }
           });
 
@@ -75,8 +73,6 @@ const Network = () => {
           break;
 
         case "receiveBlock":
-          Ainite.endMining();
-
           Ainite.chain.push(data.data);
 
           console.log("Block received from " + data.from, data.data);
