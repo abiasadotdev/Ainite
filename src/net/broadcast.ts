@@ -16,13 +16,13 @@ const Broadcast = (event: string, data: any) => {
       const broadcast = new WebSocket(address);
 
       broadcast.on("open", () => {
-        broadcast.send(JSON.stringify(message));
+        broadcast.send(JSON.stringify({ event: event, data: data }));
       });
 
       broadcast.on("error", () => {
         console.log("Some node is off, retrying...");
 
-        Broadcast(event, message);
+        Broadcast(event, data);
       });
     }
   });

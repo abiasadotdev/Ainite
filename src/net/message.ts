@@ -1,6 +1,6 @@
 import { ME } from "../node/config";
 
-class Message {
+class message {
   from: string;
   event: string;
   data: any;
@@ -14,4 +14,4 @@ class Message {
   }
 }
 
-export default Message;
+export default message;

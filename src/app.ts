@@ -87,6 +87,8 @@ const cli = () => {
       case "myWallet":
         console.log(myWallet);
 
+        console.log("Your balance", Ainite.getBalance(myWallet.publicKey));
+
         cli();
 
         break;
