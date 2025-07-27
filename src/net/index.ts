@@ -27,8 +27,8 @@ const Network = () => {
           break;
 
         case "receiveNode":
-          console.log(data.data);
-          data.data.forEach((nodeData: any) => {
+          console.log(data.data.data);
+          data.data.data.forEach((nodeData: any) => {
             const nodeValidation = NODES.find(
               (node: any) => node.host == nodeData.host
             );

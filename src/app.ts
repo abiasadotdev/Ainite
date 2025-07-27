@@ -55,7 +55,7 @@ const cli = () => {
       case "start":
         Network();
 
-        console.log("Your node is ruuning.");
+        console.log("Your node is runing.");
 
         cli();
 
