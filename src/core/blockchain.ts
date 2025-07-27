@@ -8,7 +8,7 @@ import { ME, myWallet } from "../node/config";
 
 class Blockchain {
   chain: any;
-  memPool: Transaction[];
+  memPool: any;
   difficulty: number;
 
   constructor() {
@@ -32,7 +32,7 @@ class Blockchain {
           "Genesis",
           "system",
           myWallet.publicKey,
-          1000,
+          10,
           "Mine genesis block"
         ),
       ],
@@ -50,8 +50,6 @@ class Blockchain {
     const tx = new Transaction(type, from, to, amount, messages);
 
     this.memPool.push(tx);
-
-    console.log(this.memPool);
 
     return "Transaction created and added to Mem Pool";
   }
@@ -73,9 +71,11 @@ class Blockchain {
         "Mining reward",
         "system",
         miner,
-        1000,
+        20,
         "Mining reward"
       );
+
+      this.memPool = [];
 
       this.memPool.push(tx);
 

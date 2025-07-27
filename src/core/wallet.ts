@@ -14,11 +14,13 @@ class Wallet {
   privateKey: string;
   publicKey: string;
   balance: number;
+  //deletebalance: number;
 
   constructor() {
     this.privateKey = priBase64(privateKey);
     this.publicKey = pubBase64(publicKey);
     this.balance = 0;
+    //deletethis.balance = 0;
   }
 }
 

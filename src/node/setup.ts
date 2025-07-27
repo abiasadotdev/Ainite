@@ -12,6 +12,8 @@ const Setup = (host: string, port: number) => {
   Broadcast("registerNode", { host: ME.host, port: ME.port });
 
   console.log("Setup successfully.");
+
+  console.log(ME.uptime);
 };
 
 export default Setup;

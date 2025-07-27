@@ -5,6 +5,8 @@ import Messages from "../../net/message";
 const createTransaction = (req: any, res: any) => {
   const { type, from, to, amount, messages } = req.body;
 
+  console.log(typeof req.body);
+
   const msg = new Messages("createTransaction", {
     type,
     from,

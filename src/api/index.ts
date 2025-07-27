@@ -26,7 +26,7 @@ const API = () => {
   app.post("/createTransaction", createTransaction);
 
   app.listen(port, () => {
-    console.log(`API runing on http://${ME.host}:${port}`);
+    //waitconsole.log(`API runing on http://${ME.host}:${port}`);
   });
 };
 
