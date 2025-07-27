@@ -68,7 +68,9 @@ const Network = () => {
           Ainite.createTransaction(rtype, rfrom, rto, ramount, rmessages);
 
           console.log(
-            "New transaction received" + data.from + " and added to Mem Pool",
+            "New transaction received from " +
+              data.from +
+              " and added to Mem Pool",
             data.data
           );
 

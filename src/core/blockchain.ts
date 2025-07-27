@@ -51,6 +51,8 @@ class Blockchain {
 
     this.memPool.push(tx);
 
+    console.log(this.memPool);
+
     return "Transaction created and added to Mem Pool";
   }
 
@@ -75,7 +77,7 @@ class Blockchain {
         "Mining reward"
       );
 
-      this.memPool = [tx];
+      this.memPool.push(tx);
 
       Broadcast("receiveTransaction", tx);
 
