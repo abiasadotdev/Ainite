@@ -10,7 +10,7 @@ import Ainite from "./core";
 
 import Setup from "./node/setup";
 
-import { ME, myWallet } from "./node/config";
+import { ME, NODES, myWallet } from "./node/config";
 
 const HOST = process.argv[2];
 
@@ -28,7 +28,7 @@ const cli = () => {
     switch (menu) {
       case "menu":
         console.log(
-          "- setup : Setup your node\n- start : Runing your node\n- api : Open your API server (maintenance)\n- node : View your node info\n- myWallet : View your wallet info\n- autoMining : Enable auto mining\n- off : Shutdown your node and close CLI"
+          "- setup : Setup your node\n- start : Runing your node\n- api : Open your API server (maintenance)\n- node : View your node info\n- nodeList : View node list\n- myWallet : View your wallet info\n- autoMining : Enable auto mining\n- off : Shutdown your node and close CLI"
         );
 
         cli();
@@ -72,6 +72,13 @@ const cli = () => {
 
       case "node":
         console.log(ME);
+
+        cli();
+
+        break;
+
+      case "nodeList":
+        console.log(NODES);
 
         cli();
 
