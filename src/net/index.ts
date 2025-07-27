@@ -47,6 +47,8 @@ const Network = () => {
         case "createTransaction":
           const { type, from, to, amount, messages } = data.data;
 
+          console.log(data.data);
+
           Ainite.createTransaction(type, from, to, amount, messages);
 
           Broadcast("receiveTransaction", data.data);

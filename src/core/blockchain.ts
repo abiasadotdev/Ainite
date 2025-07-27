@@ -20,7 +20,7 @@ class Blockchain {
       if (this.chain.length < 1) {
         this.chain.push(this.createGenesisBlock());
       }
-    }, 20000);
+    }, 10000);
   }
 
   createGenesisBlock() {

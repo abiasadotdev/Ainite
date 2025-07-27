@@ -1,5 +1,7 @@
 import Network from "./net";
 
+import API from "./api";
+
 import Broadcast from "./net/broadcast";
 
 import Ainite from "./core";
@@ -15,6 +17,8 @@ const PORT = Number(process.argv[3]);
 Setup(HOST, PORT);
 
 Network();
+
+API();
 
 console.log("Your private key : ", myWallet.privateKey);
 
