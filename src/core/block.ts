@@ -1,7 +1,5 @@
 import * as crypto from "crypto";
 
-import { myWallet } from "../node/config";
-
 class Block {
   index: number;
   timestamp: number;

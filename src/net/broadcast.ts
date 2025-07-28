@@ -1,17 +1,19 @@
+import fs from "fs";
+
 import WebSocket from "ws";
 
-import { NODES } from "../node/config";
-
-import { ME } from "../node/config";
-
 import Message from "./message";
+
+const configFile = fs.readFileSync("./src/node/config.json", "utf-8");
+
+const config = JSON.parse(configFile);
 
 const Broadcast = (event: string, data: any) => {
   const message = new Message(event, data);
 
-  NODES.forEach((node) => {
-    if (node.host !== ME.host) {
-      const address = "ws://" + node.host + ":" + node.port;
+  config.nodes.forEach((node: any) => {
+    if (node.ip !== config.ip) {
+      const address = "ws://" + node.ip + ":" + node.port;
 
       const broadcast = new WebSocket(address);
 
@@ -20,9 +22,9 @@ const Broadcast = (event: string, data: any) => {
       });
 
       broadcast.on("error", () => {
-        console.log("Some node is off, retrying...");
-
-        Broadcast(event, data);
+        setInterval(() => {
+          Broadcast(event, data);
+        }, 10000);
       });
     }
   });

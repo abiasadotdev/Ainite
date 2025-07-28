@@ -1,10 +1,18 @@
+import fs from "fs";
+
+import os from "os";
+
 import Block from "./block";
 
 import Transaction from "./transaction";
 
 import Broadcast from "../net/broadcast";
 
-import { ME, myWallet } from "../node/config";
+import { myWallet } from "../wallet";
+
+const storageFile = fs.readFileSync("./src/storage/storage.json", "utf-8");
+
+const storage = JSON.parse(storageFile);
 
 class Blockchain {
   chain: any;
@@ -32,7 +40,7 @@ class Blockchain {
           "Genesis",
           "system",
           myWallet.publicKey,
-          10,
+          1000,
           "Mine genesis block"
         ),
       ],
@@ -55,7 +63,17 @@ class Blockchain {
   }
 
   mineMemPool(miner: any) {
-    if (ME.uptime > 50000) {
+    if (os.uptime() > 50000) {
+      const tx = new Transaction(
+        "Mining reward",
+        "system",
+        miner,
+        1500,
+        "Mining reward"
+      );
+
+      this.memPool.push(tx);
+
       const block = new Block(
         this.getLatestBlock().index + 1,
         Date.now(),
@@ -67,19 +85,7 @@ class Blockchain {
 
       console.log("MemPool successfully mined.");
 
-      const tx = new Transaction(
-        "Mining reward",
-        "system",
-        miner,
-        20,
-        "Mining reward"
-      );
-
       this.memPool = [];
-
-      this.memPool.push(tx);
-
-      Broadcast("receiveTransaction", tx);
 
       return block;
     } else {

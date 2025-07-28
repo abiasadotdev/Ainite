@@ -1,13 +1,17 @@
-import { WebSocketServer } from "ws";
+import fs from "fs";
 
-import { ME, NODES } from "../node/config";
+import { WebSocketServer } from "ws";
 
 import Broadcast from "./broadcast";
 
 import Ainite from "../core";
 
+const configFile = fs.readFileSync("./src/node/config.json", "utf-8");
+
+const config = JSON.parse(configFile);
+
 const Network = () => {
-  const network = new WebSocketServer({ port: ME.port });
+  const network = new WebSocketServer({ port: config.port });
 
   network.on("connection", (ws) => {
     ws.on("message", (msg: any) => {
@@ -15,11 +19,13 @@ const Network = () => {
 
       switch (data.event) {
         case "registerNode":
-          NODES.push(data.data);
+          config.nodes.push(data.data);
 
-          NODES.forEach((node) => {
-            if (node.host !== data.data.host) {
-              Broadcast("receiveNode", NODES);
+          fs.writeFileSync("./src/node/config.json", JSON.stringify(config));
+
+          config.nodes.forEach((node: any) => {
+            if (node.ip !== data.data.ip) {
+              Broadcast("receiveNode", config.nodes);
             }
           });
 
@@ -29,12 +35,17 @@ const Network = () => {
         case "receiveNode":
           console.log(data);
           data.data.forEach((nodeData: any) => {
-            const nodeValidation = NODES.find(
-              (node: any) => node.host == nodeData.host
+            const nodeValidation = config.nodes.find(
+              (node: any) => node.ip == nodeData.ip
             );
 
             if (!nodeValidation) {
-              NODES.push(nodeData);
+              config.nodes.push(nodeData);
+
+              fs.writeFileSync(
+                "./src/node/config.json",
+                JSON.stringify(config)
+              );
             }
           });
 
