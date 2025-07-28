@@ -96,7 +96,11 @@ const CLI = () => {
         console.log(chalk.dim("Auto mining enable."));
 
         setInterval(() => {
-          Ainite.mineMemPool(myWallet.publicKey);
+          if (Ainite.memPool.length > 1) {
+            Ainite.mineMemPool(myWallet.publicKey);
+          }
+
+          console.log(chalk.dim("No transaction in mem pool."));
         }, 22000);
 
         CLI();
