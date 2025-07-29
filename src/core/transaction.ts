@@ -4,6 +4,7 @@ class Transaction {
   to: string;
   amount: number;
   messages: string;
+  timestamp: number;
 
   constructor(
     type: string,
@@ -17,6 +18,7 @@ class Transaction {
     this.to = to;
     this.amount = amount;
     this.messages = messages;
+    this.timestamp = Date.now();
   }
 }
 

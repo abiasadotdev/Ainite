@@ -6,17 +6,11 @@ import Block from "./block";
 
 import Transaction from "./transaction";
 
-import Broadcast from "../net/broadcast";
-
-import { myWallet } from "../wallet";
-
-const storageFile = fs.readFileSync("./src/storage/storage.json", "utf-8");
-
-const storage = JSON.parse(storageFile);
+const publicKey = fs.readFileSync("./src/wallet/key.txt", "utf-8");
 
 class Blockchain {
-  chain: any;
-  memPool: any;
+  chain: Block[];
+  memPool: Transaction[];
   difficulty: number;
 
   constructor() {
@@ -39,7 +33,7 @@ class Blockchain {
         new Transaction(
           "Genesis",
           "system",
-          myWallet.publicKey,
+          publicKey,
           1000,
           "Mine genesis block"
         ),
@@ -62,7 +56,7 @@ class Blockchain {
     return "Transaction created and added to Mem Pool";
   }
 
-  mineMemPool(miner: any) {
+  mineMemPool(miner: string) {
     if (os.uptime() > 50000) {
       const tx = new Transaction(
         "Mining reward",
@@ -117,7 +111,7 @@ class Blockchain {
     return this.chain[this.chain.length - 1];
   }
 
-  getBalance(address: any) {
+  getBalance(address: string) {
     let balance = 0;
 
     for (const block of this.chain) {

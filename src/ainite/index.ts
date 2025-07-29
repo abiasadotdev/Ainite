@@ -4,6 +4,8 @@ import readline from "readline";
 
 import chalk from "chalk";
 
+import * as emoji from "node-emoji";
+
 import os from "os";
 
 import Ainite from "../core";
@@ -12,7 +14,7 @@ import Network from "../net";
 
 import Broadcast from "../net/broadcast";
 
-import { myWallet, createWallet } from "../wallet";
+import createWallet from "../wallet/createWallet";
 
 const read = readline.createInterface({
   input: process.stdin,
@@ -21,11 +23,9 @@ const read = readline.createInterface({
 
 const configFile = fs.readFileSync("./src/node/config.json", "utf-8");
 
-const keyFile = fs.readFileSync("./src/wallet/key.json", "utf-8");
+const keyFile = fs.readFileSync("./src/wallet/key.txt", "utf-8");
 
 const myConfig = JSON.parse(configFile);
-
-const key = JSON.parse(keyFile);
 
 console.log(chalk.bgBlue.bold("Welcome To Ainite CLI"));
 
@@ -33,7 +33,7 @@ console.log(chalk.blue('\nInput "menu" for view list menu.'));
 
 const CLI = () => {
   if (myConfig.ip.length < 1) {
-    console.log(chalk.dim("Setup started..."));
+    console.log(chalk.dim(emoji.get("gear"), "Setup started..."));
 
     myConfig.ip = os.networkInterfaces()["Wi-Fi"]?.[3].address;
 
@@ -42,16 +42,21 @@ const CLI = () => {
     Broadcast("registerNode", { ip: myConfig.ip, port: myConfig.port });
 
     console.log(chalk.dim("Your node successfully setup."));
+  }
 
+  if (keyFile.length == 0) {
     console.log(chalk.dim("Let's create your wallet."));
 
-    read.question(chalk.blue("Create password : "), (pass) => {
-      createWallet(pass);
+    read.question(
+      chalk.blue("Create seed (you must remember it!) : "),
+      (seed) => {
+        createWallet(seed);
 
-      console.log(chalk.dim("Wallet created."));
+        console.log(chalk.dim("Start again your node."));
 
-      CLI();
-    });
+        process.exit(0);
+      }
+    );
   }
 
   read.question(chalk.blue("Menu : "), (menu) => {
@@ -70,14 +75,19 @@ const CLI = () => {
       case "start":
         Network();
 
-        console.log(chalk.dim("Your node is running."));
+        console.log(chalk.dim("🔌 Your node is running."));
 
         CLI();
 
         break;
 
       case "wallet":
-        console.log(myWallet);
+        console.log(
+          chalk.blue("🔑 Your publicKey :"),
+          chalk.bold.blue(keyFile),
+          chalk.blue("\n🪙 Your balance : "),
+          Ainite.getBalance(keyFile)
+        );
 
         CLI();
 
@@ -97,7 +107,7 @@ const CLI = () => {
 
         setInterval(() => {
           if (Ainite.memPool.length > 1) {
-            Ainite.mineMemPool(myWallet.publicKey);
+            Ainite.mineMemPool(keyFile);
           }
 
           console.log(chalk.dim("No transaction in mem pool."));

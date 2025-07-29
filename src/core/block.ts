@@ -6,7 +6,7 @@ class Block {
   data: any;
   previousHash: string;
   hash: string;
-  nonce: number;
+  minerUptime: number;
 
   constructor(
     index: number,
@@ -19,7 +19,7 @@ class Block {
     this.data = data;
     this.previousHash = previousHash;
     this.hash = this.createHash();
-    this.nonce = 0;
+    this.minerUptime = 0;
   }
 
   createHash() {
@@ -31,7 +31,7 @@ class Block {
           JSON.stringify(this.data) +
           this.previousHash +
           this.hash +
-          this.nonce
+          this.minerUptime
       )
       .digest("hex");
   }
