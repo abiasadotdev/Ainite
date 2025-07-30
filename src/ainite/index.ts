@@ -14,6 +14,8 @@ import Broadcast from "../net/broadcast";
 
 import createWallet from "../wallet/createWallet";
 
+import transfer from "../wallet/transfer";
+
 const read = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -62,7 +64,7 @@ const CLI = () => {
       case "menu":
         console.log(
           chalk.blue(
-            "- start : Running your node\n- wallet : View your wallet information\n- newWallet : Create new wallet\n- autoMining : Enable auto mining\n- off : Shutdown your node"
+            "- start : Running your node\n- wallet : View your wallet information\n- newWallet : Create new wallet\n- transfer : Transfer your coin\n- autoMining : Enable auto mining\n- off : Shutdown your node"
           )
         );
 
@@ -103,15 +105,31 @@ const CLI = () => {
 
         break;
 
+      case "transfer":
+        read.question(chalk.blue("Address : "), (address) => {
+          read.question(chalk.blue("Amount : "), (amount) => {
+            read.question(chalk.blue("Messages : "), (messages) => {
+              transfer(address, Number(amount), messages);
+              console.log(Ainite.memPool);
+              CLI();
+            });
+          });
+        });
+
+        break;
+
       case "autoMining":
         console.log(chalk.dim("Auto mining enable."));
 
         setInterval(() => {
-          if (Ainite.memPool.length > 1) {
+          if (Ainite.memPool.length >= 1) {
             Ainite.mineMemPool(keyFile);
+            return;
           }
 
           console.log(chalk.dim("No transaction in mem pool."));
+
+          return;
         }, 22000);
 
         CLI();

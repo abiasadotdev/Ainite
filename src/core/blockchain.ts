@@ -37,6 +37,12 @@ class Blockchain {
     return chain.chain;
   }
 
+  pushBlock(block: any) {
+    chain.push(block);
+
+    fs.writeFileSync("./src/storage/chain.json", JSON.stringify(chain));
+  }
+
   createGenesisBlock() {
     const block = new Block(
       0,

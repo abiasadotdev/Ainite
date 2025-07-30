@@ -78,7 +78,7 @@ const Network = () => {
           break;
 
         case "receiveBlock":
-          Ainite.chain.push(data.data);
+          Ainite.pushBlock(data.data);
 
           console.log("\n\nBlock received " + data.data, "\n");
       }
