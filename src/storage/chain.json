@@ -1,1 +1,3 @@
-{"chain":[{"index":0,"timestamp":1753883335771,"data":[{"type":"Genesis","from":"system","to":"e9aceb412ba518ab1939567d1bab7d1b9e47e546ec11c903b4b29a92c760456c","amount":1000,"messages":"Mine genesis block","timestamp":1753883335771}],"previousHash":"0","hash":"6638aacec03db78f9a30a9ee4f128438169ff57a9d2a5bc12e3b02683dc66c17","minerUptime":19905.437}]}
+{
+  "chain": []
+}
