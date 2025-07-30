@@ -12,8 +12,8 @@ const Broadcast = (event: string, data: any) => {
   const message = new Message(event, data);
 
   config.nodes.forEach((node: any) => {
-    if (node.ip !== config.ip) {
-      const address = "ws://" + node.ip + ":" + node.port;
+    if (node.host !== config.host) {
+      const address = "ws://" + node.host + ":" + node.port;
 
       const broadcast = new WebSocket(address);
 

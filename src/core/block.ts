@@ -1,5 +1,7 @@
 import * as crypto from "crypto";
 
+import os from "os";
+
 class Block {
   index: number;
   timestamp: number;
@@ -19,7 +21,7 @@ class Block {
     this.data = data;
     this.previousHash = previousHash;
     this.hash = this.createHash();
-    this.minerUptime = 0;
+    this.minerUptime = os.uptime();
   }
 
   createHash() {

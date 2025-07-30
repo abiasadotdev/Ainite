@@ -6,15 +6,19 @@ import Block from "./block";
 
 import Transaction from "./transaction";
 
+const chainFile = fs.readFileSync("./src/storage/chain.json", "utf-8");
+
+const chain = JSON.parse(chainFile);
+
 const publicKey = fs.readFileSync("./src/wallet/key.txt", "utf-8");
 
 class Blockchain {
-  chain: Block[];
+  chain: any;
   memPool: Transaction[];
   difficulty: number;
 
   constructor() {
-    this.chain = [];
+    this.chain = this.readChain();
     this.memPool = [];
     this.difficulty = 4;
 
@@ -25,8 +29,16 @@ class Blockchain {
     }, 10000);
   }
 
+  readChain() {
+    if (chain.chain.length < 1) {
+      return [];
+    }
+
+    return chain.chain;
+  }
+
   createGenesisBlock() {
-    return new Block(
+    const block = new Block(
       0,
       Date.now(),
       [
@@ -40,6 +52,10 @@ class Blockchain {
       ],
       "0"
     );
+
+    chain.chain.push(block);
+
+    fs.writeFileSync("./src/storage/chain.json", JSON.stringify(chain));
   }
 
   createTransaction(
@@ -75,9 +91,11 @@ class Blockchain {
         this.getLatestBlock().hash
       );
 
-      this.chain.push(block);
+      chain.chain.push(block);
 
-      console.log("MemPool successfully mined.");
+      fs.writeFileSync("./storage/chain.json", JSON.stringify(chain));
+
+      console.log("Mempool successfully mined.");
 
       this.memPool = [];
 

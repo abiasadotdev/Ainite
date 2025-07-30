@@ -24,19 +24,18 @@ const Network = () => {
           fs.writeFileSync("./src/node/config.json", JSON.stringify(config));
 
           config.nodes.forEach((node: any) => {
-            if (node.ip !== data.data.ip) {
+            if (node.host !== data.data.host) {
               Broadcast("receiveNode", config.nodes);
             }
           });
 
-          console.log("Node registered.", data.data);
+          console.log("Node registered.", data.data, "\n");
           break;
 
         case "receiveNode":
-          console.log(data);
           data.data.forEach((nodeData: any) => {
             const nodeValidation = config.nodes.find(
-              (node: any) => node.ip == nodeData.ip
+              (node: any) => node.host == nodeData.host
             );
 
             if (!nodeValidation) {
@@ -49,7 +48,7 @@ const Network = () => {
             }
           });
 
-          console.log("New node received.", data.data);
+          console.log("New node received.", data.data, "\n");
           break;
 
         case "syncBlock":
@@ -63,12 +62,9 @@ const Network = () => {
 
           Broadcast("receiveTransaction", data.data);
 
-          console.log(
-            "New transaction created and added to Mem Pool",
-            data.data
-          );
+          console.log("\n\nNew transaction. TX : ", data.data, "\n");
 
-          ws.send("Trensaction created and added to Mem Pool.");
+          ws.send("Transaction created and added to Mem Pool.");
 
           break;
 
@@ -77,26 +73,19 @@ const Network = () => {
 
           Ainite.createTransaction(rtype, rfrom, rto, ramount, rmessages);
 
-          console.log(
-            "New transaction received from " +
-              data.from +
-              " and added to Mem Pool",
-            data.data
-          );
+          console.log("\n\nNew transaction received from", data.data, "\n");
 
           break;
 
         case "receiveBlock":
           Ainite.chain.push(data.data);
 
-          console.log("Block received from " + data.from, data.data);
+          console.log("\n\nBlock received " + data.data, "\n");
       }
     });
   });
 
   network.on("error", (error) => console.log(error));
-
-  //waitconsole.log("Network running. Address : ws://" + ME.host + ":" + ME.port);
 };
 
 export default Network;

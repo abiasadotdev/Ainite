@@ -4,8 +4,6 @@ import readline from "readline";
 
 import chalk from "chalk";
 
-import * as emoji from "node-emoji";
-
 import os from "os";
 
 import Ainite from "../core";
@@ -32,14 +30,14 @@ console.log(chalk.bgBlue.bold("Welcome To Ainite CLI"));
 console.log(chalk.blue('\nInput "menu" for view list menu.'));
 
 const CLI = () => {
-  if (myConfig.ip.length < 1) {
-    console.log(chalk.dim(emoji.get("gear"), "Setup started..."));
+  if (myConfig.host.length < 1) {
+    console.log(chalk.dim("Setup started..."));
 
-    myConfig.ip = os.networkInterfaces()["Wi-Fi"]?.[3].address;
+    myConfig.host = os.networkInterfaces()["Wi-Fi"]?.[3].address;
 
     fs.writeFileSync("./src/node/config.json", JSON.stringify(myConfig));
 
-    Broadcast("registerNode", { ip: myConfig.ip, port: myConfig.port });
+    Broadcast("registerNode", { host: myConfig.host, port: myConfig.port });
 
     console.log(chalk.dim("Your node successfully setup."));
   }
@@ -59,7 +57,7 @@ const CLI = () => {
     );
   }
 
-  read.question(chalk.blue("Menu : "), (menu) => {
+  read.question(chalk.blue("\nMenu : "), (menu) => {
     switch (menu) {
       case "menu":
         console.log(
@@ -83,7 +81,7 @@ const CLI = () => {
 
       case "wallet":
         console.log(
-          chalk.blue("🔑 Your publicKey :"),
+          chalk.blue("\n🔑 Your publicKey :"),
           chalk.bold.blue(keyFile),
           chalk.blue("\n🪙 Your balance : "),
           Ainite.getBalance(keyFile)
@@ -94,11 +92,14 @@ const CLI = () => {
         break;
 
       case "newWallet":
-        read.question(chalk.blue("Create password : "), (pass) => {
-          createWallet(pass);
+        read.question(
+          chalk.blue("\nCreate seed (you must remember it!) :"),
+          (pass) => {
+            createWallet(pass);
 
-          CLI();
-        });
+            CLI();
+          }
+        );
 
         break;
 
