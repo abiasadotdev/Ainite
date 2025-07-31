@@ -1,21 +1,3 @@
 {
-  "chain": [
-    {
-      "index": 0,
-      "timestamp": 1753921815235,
-      "data": [
-        {
-          "type": "Genesis",
-          "from": "system",
-          "to": "16c1581b153c8a957a2c8c08929faf06ce176eeb2d894d6848a9de010392fd81",
-          "amount": 1000,
-          "messages": "Mine genesis block",
-          "timestamp": 1753921815235
-        }
-      ],
-      "previousHash": "0",
-      "hash": "7f90a7df6f25c30f68b56ce3515024bdfc47c6d3ff5ecef57d345243c1862cd9",
-      "minerUptime": 2022.89
-    }
-  ]
+  "chain": []
 }
