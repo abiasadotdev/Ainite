@@ -10,6 +10,8 @@ import Ainite from "../core";
 
 import Network from "../net";
 
+import call from "../net/call";
+
 import Broadcast from "../net/broadcast";
 
 import createWallet from "../wallet/createWallet";
@@ -39,7 +41,10 @@ const CLI = () => {
 
     fs.writeFileSync("./src/node/config.json", JSON.stringify(myConfig));
 
-    Broadcast("registerNode", { host: myConfig.host, port: myConfig.port });
+    call(myConfig.seed.host, myConfig.seed.port, "registerNode", {
+      host: myConfig.host,
+      port: myConfig.port,
+    });
 
     console.log(chalk.dim("Your node successfully setup."));
   }
