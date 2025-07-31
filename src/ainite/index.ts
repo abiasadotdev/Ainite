@@ -12,8 +12,6 @@ import Network from "../net";
 
 import call from "../net/call";
 
-import Broadcast from "../net/broadcast";
-
 import createWallet from "../wallet/createWallet";
 
 import transfer from "../wallet/transfer";
@@ -39,7 +37,10 @@ const CLI = () => {
 
     myConfig.host = os.networkInterfaces()["Wi-Fi"]?.[3].address;
 
-    fs.writeFileSync("./src/node/config.json", JSON.stringify(myConfig));
+    fs.writeFileSync(
+      "./src/node/config.json",
+      JSON.stringify(myConfig, null, 2)
+    );
 
     call(myConfig.seed.host, myConfig.seed.port, "registerNode", {
       host: myConfig.host,
@@ -120,7 +121,6 @@ const CLI = () => {
             });
           });
         });
-
         break;
 
       case "autoMining":

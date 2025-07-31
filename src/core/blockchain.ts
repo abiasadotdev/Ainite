@@ -15,32 +15,31 @@ const publicKey = fs.readFileSync("./src/wallet/key.txt", "utf-8");
 class Blockchain {
   chain: any;
   memPool: Transaction[];
-  difficulty: number;
+  uptime: number;
 
   constructor() {
-    this.chain = this.readChain();
-    this.memPool = [];
-    this.difficulty = 4;
-
-    setTimeout(() => {
-      if (this.chain.length < 1) {
-        this.chain.push(this.createGenesisBlock());
-      }
-    }, 10000);
-  }
-
-  readChain() {
-    if (chain.chain.length < 1) {
-      return [];
+    try {
+      const chainData = chain.chain;
+      this.chain = Array.isArray(chainData) ? chainData : [];
+    } catch {
+      this.chain = [];
     }
 
-    return chain.chain;
+    this.memPool = [];
+    this.uptime = 50000;
+
+    if (this.chain.length < 1) {
+      this.createGenesisBlock();
+    }
   }
 
   pushBlock(block: any) {
-    chain.push(block);
+    this.chain.push(block);
 
-    fs.writeFileSync("./src/storage/chain.json", JSON.stringify(chain));
+    fs.writeFileSync(
+      "./src/storage/chain.json",
+      JSON.stringify(this.chain, null, 2)
+    );
   }
 
   createGenesisBlock() {
@@ -56,12 +55,18 @@ class Blockchain {
           "Mine genesis block"
         ),
       ],
+
       "0"
     );
 
-    chain.chain.push(block);
+    this.chain.push(block);
 
-    fs.writeFileSync("./src/storage/chain.json", JSON.stringify(chain));
+    fs.writeFileSync(
+      "./src/storage/chain.json",
+      JSON.stringify(this.chain, null, 2)
+    );
+
+    return block;
   }
 
   createTransaction(
@@ -79,7 +84,7 @@ class Blockchain {
   }
 
   mineMemPool(miner: string) {
-    if (os.uptime() > 50000) {
+    if (os.uptime() > this.uptime) {
       const tx = new Transaction(
         "Mining reward",
         "system",
